@@ -1,19 +1,6 @@
-FROM ubuntu:16.04
+FROM openjdk:11
 
-ENV COLOR "red"
-RUN apt-get update -y && \
-    apt-get install -y python-pip python-dev
-
-# We copy just the requirements.txt first to leverage Docker cache
-COPY ./requirements.txt /app/requirements.txt
-
-WORKDIR /app
-
-RUN pip install -r requirements.txt
-
-COPY . /app
-
-EXPOSE 8080
-ENTRYPOINT [ "python" ]
-
-CMD [ "app.py" ]
+RUN mvn clean install
+COPY target/xyz.jar /usr/src/XYZapp/xyz.jar
+WORKDIR /usr/src/XYZapp
+CMD ["java", "-jar","xyz.jar ]
